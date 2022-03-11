@@ -1,5 +1,15 @@
+import Head from 'next/head';
+import homeStyles from '../styles/home.module.scss';
+
 export default function Home() {
   return (
-    <h1>Hello filho da puta</h1>
+    <>
+      <Head>
+        <title>Início | bald.news</title>
+      </Head>
+      <h1 className={homeStyles.title}>
+        Hello <span>filho da puta</span>
+      </h1>
+    </>
   )
 }
