@@ -5,11 +5,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Início | bald.news</title>
+        <title>Home | bald.news</title>
       </Head>
-      <h1 className={homeStyles.title}>
-        Hello <span>filho da puta</span>
-      </h1>
+      <main>
+        <section>
+          
+        </section>
+      </main>
     </>
   )
 }
