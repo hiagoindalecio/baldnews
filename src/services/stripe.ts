@@ -1,13 +1,13 @@
-import Stripe from 'stripe';
-import { version, name } from '../../package.json';
+import StripeInstance from 'stripe';
+import { version as appVersion, name as appName } from '../../package.json';
 
-export const stripe = new Stripe(
+export const stripe = new StripeInstance(
   process.env.STRIPE_API_KEY,
   {
     apiVersion: "2020-08-27",
     appInfo: {
-      name,
-      version
+      name: appName,
+      version: appVersion
     },
   }
 )
