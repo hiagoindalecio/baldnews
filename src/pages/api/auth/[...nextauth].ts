@@ -18,37 +18,37 @@ export default NextAuth({
 
       const findUser = async (): Promise<boolean> => {
         return supabase
-        .from('users')
-        .select()
-        .eq('email', email)
-        .then((userResult) => {
-          if (userResult.data.length > 0) {
-            // Existent user
-            console.log(`\nUser found\n`);
-            return true;
-          } else {
-            // Not existent user
-            console.log(`\nUser not found\n`);
-            return false;
-          }
-        });
+          .from('users')
+          .select()
+          .eq('email', email)
+          .then((userResult) => {
+            if (userResult.data.length > 0) {
+              // Existent user
+              console.log(`\nUser found\n`);
+              return true;
+            } else {
+              // Not existent user
+              console.log(`\nUser not found\n`);
+              return false;
+            }
+          });
       }
 
       const createUser = async(): Promise<boolean> => {
         return supabase
-        .from('users')
-        .insert({ email }, {
-          returning: 'minimal'
-        })
-        .then((result) => {
-          if (result.status === 201) {
-            console.log(`\nUser created successfully\n`);
-            return true;
-          } else {  
-            console.error(`\nCreating user error\n${JSON.stringify(result.error)}\n`);
-            return false;
-          }
-        })
+          .from('users')
+          .insert({ email }, {
+            returning: 'minimal'
+          })
+          .then((result) => {
+            if (result.status === 201) {
+              console.log(`\nUser created successfully\n`);
+              return true;
+            } else {  
+              console.error(`\nCreating user error\n${JSON.stringify(result.error)}\n`);
+              return false;
+            }
+          });
       }
 
       if (!(await findUser()) && !(await createUser()))
