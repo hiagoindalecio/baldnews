@@ -16,7 +16,7 @@ export default NextAuth({
     async signIn({ user }) {
       const { email } = user;
 
-      const findUser = async (): Promise<boolean> => {
+      const findUserDB = async (): Promise<boolean> => {
         return supabase
           .from('users')
           .select()
@@ -34,7 +34,7 @@ export default NextAuth({
           });
       }
 
-      const createUser = async(): Promise<boolean> => {
+      const createUserDB = async(): Promise<boolean> => {
         return supabase
           .from('users')
           .insert({ email }, {
@@ -51,7 +51,7 @@ export default NextAuth({
           });
       }
 
-      if (!(await findUser()) && !(await createUser()))
+      if (!(await findUserDB()) && !(await createUserDB()))
         return false;
       else
         return true;
