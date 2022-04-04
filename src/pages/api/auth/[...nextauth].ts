@@ -1,8 +1,7 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 
-import { query as q } from 'faunadb'
-import { fauna } from '../../../services/fauna';
+import { supabase } from '../../../services/supabase';
 
 export default NextAuth({
   providers: [
@@ -12,26 +11,50 @@ export default NextAuth({
       authorization: { params: { scope: 'read:user' } },
     }),
   ],
+  secret: process.env.JWT_SIGNING_PRIVATE_KEY,
   callbacks: {
     async signIn({ user }) {
-      console.log('EMAIL LOGIN: ' + user.email)
-      try {
-        await fauna.query(
-          q.Create(
-            q.Collections('users'),
-            { 
-              data: { 
-                email: user.email,
-              },
-            }
-          )
-        )
-      } catch (e) {
-        console.log(`FaunaDB ERROR: ${e}`);
+      const { email } = user;
+
+      const findUser = async (): Promise<boolean> => {
+        return supabase
+        .from('users')
+        .select()
+        .eq('email', email)
+        .then((userResult) => {
+          if (userResult.data.length > 0) {
+            // Existent user
+            console.log(`\nUser found\n`);
+            return true;
+          } else {
+            // Not existent user
+            console.log(`\nUser not found\n`);
+            return false;
+          }
+        });
       }
-      
-      return true;
+
+      const createUser = async(): Promise<boolean> => {
+        return supabase
+        .from('users')
+        .insert({ email }, {
+          returning: 'minimal'
+        })
+        .then((result) => {
+          if (result.status === 201) {
+            console.log(`\nUser created successfully\n`);
+            return true;
+          } else {  
+            console.error(`\nCreating user error\n${JSON.stringify(result.error)}\n`);
+            return false;
+          }
+        })
+      }
+
+      if (!(await findUser()) && !(await createUser()))
+        return false;
+      else
+        return true;
     },
   },
-  secret: process.env.JWT_SECRET,
 });
