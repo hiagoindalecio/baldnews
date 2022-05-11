@@ -24,7 +24,6 @@ export const config = {
 
 const relevantEvents = new Set([
   'checkout.session.completed',
-  'customer.subscription.created',
   'customer.subscription.updated',
   'customer.subscription.deleted',
 ]);
@@ -46,17 +45,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       console.log(`Relevant event detected: ${event.type}`);
       try {
         switch (event.type) {
-          case 'customer.subscription.created':
-            const subscription = event.data.object as Stripe.Subscription;
-            const subSavResult = await saveSubscription(
-              subscription.id,
-              subscription.customer.toString()
-            );
-
-            if (!subSavResult)
-              return res.status(500).json({ message: 'Subscription saving failed.' });
-            
-            break;
           case 'customer.subscription.updated':
           case 'customer.subscription.deleted':
             const subscriptionUpdate = event.data.object as Stripe.Subscription;
