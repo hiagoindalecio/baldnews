@@ -10,7 +10,7 @@ export function Header() {
         <h1>bald.news</h1>
         <nav>
           <a href="" className={styles.active}>Home</a>
-          <a href="">Posts</a>
+          <a href="/posts">Posts</a>
         </nav>
         <SignInButton />
       </div>

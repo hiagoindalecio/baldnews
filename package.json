@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prismicio/client": "^6.5.1",
     "@stripe/stripe-js": "^1.26.0",
     "@supabase/supabase-js": "^1.33.2",
     "axios": "^0.26.1",
